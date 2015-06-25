@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." default="create-zip" name="ModuleResultsDiff">
+    <property name="appfile" value="ModuleResultsDiff.jar"/>
+
+  <target name="create-zip" depends="package">
+    <property name="dest.dir" value="." />
+	<zip destfile="${dest.dir}/${ant.project.name}.zip" whenempty="fail" defaultexcludes="true">
+	  <fileset dir="." includes="manifest, *.pdf" />
+		<fileset dir="lib">
+		  <include name="*.jar" />
+	  </fileset>
+      <fileset dir=".">
+	    <include name="${appfile}"/>
+	  </fileset>
+	</zip>
+  </target>
+
+  <target name="init">
+      <path id="library.classpath">
+        <fileset dir="lib" includes="*.jar" id="jar.lib"> </fileset>
+      </path>
+  </target>
+
+  <target name="package" depends="compile">
+      <jar basedir="classes" defaultexcludes="true" excludes="**/*.java, **/*.form, **/.nbattrs" jarfile="lib\${appfile}">
+        <manifest>
+          <attribute name="Main-Class" value="org.genepattern.ModuleResultsDiff.DiffMain"/>
+        </manifest>
+      </jar>
+  </target>
+
+  <target name="compile" depends="clean">
+    <javac debug="true" defaultexcludes="true" deprecation="true" destdir="classes" optimize="false"
+           proceed="false" srcdir="src" target="1.7" source="1.7">
+    </javac>
+  </target>
+
+  <target name="clean" depends="init">
+    <delete failonerror="false">
+      <fileset dir = "classes" includes="**" />
+    </delete>
+    <mkdir dir="classes" />
+  </target>
+</project>
